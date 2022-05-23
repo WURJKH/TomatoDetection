@@ -1,2 +1,2 @@
 # DetectronTomato
-Scripts for training a Tomato reckogniser including inference demo
+Scripts for training a Tomato recognition model, including inference demo.
