@@ -1,0 +1,74 @@
+install yolact, be aware that the repository must run in python3!
+
+There are several libraries already installed on the Jetson Xavier:
+python2, python3, opencv, cuda, numpy
+
+First install the right pip version of Python3 (pip3):
+sudo apt install python3-pip
+pip3 install wheel
+pip3 install cython
+wget https://nvidia.box.com/shared/static/mmu3xb3sp4o8qg9tji90kkxl1eijjfc6.whl -O torch-1.1.0-cp36-cp36m-linux_aarch64.whl
+pip3 install numpy torch-1.1.0-cp36-cp36m-linux_aarch64.whl
+sudo apt-get install libjpeg-dev zlib1g-dev
+git clone -b v0.3.0 https://github.com/pytorch/vision torchvision
+cd torchvision
+sudo python3 setup.py install
+cd
+pip3 install pillow pycocotools 
+sudo apt-get install python3-matplotlib 
+
+cd yolact
+cd external/DCNv2
+sudo python3 setup.py build develop
+
+python3 eval.py --trained_model=weights/yolact_plus_base_54_800000.pth --score_threshold=0.15 --top_k=15 --image=data/kim_trump.jpg
+
+Follow the following procedure:
+https://www.jetsonhacks.com/2019/10/25/realsense-ros-wrapper-jetson-nano/
+
+Realsense D435 (preferred firmware 5.12.1)
+
+
+(Realsense should be disconnected!)
+install librealsense (v. 2.32.1):
+https://github.com/jetsonhacks/installRealSenseSDK
+./installLibrealsense.sh
+
+install ROS Xavier:
+https://github.com/jetsonhacks/installROSXavier
+./installROS.sh -p ros-melodic-desktop-full
+./setupCatkinWorkspace.sh 
+
+install the ROS wrapper for RealSense SDK:
+https://github.com/jetsonhacks/installRealSenseROS
+./installRealSenseROS.sh 
+
+sudo pip3 install rospkg
+
+*******************
+End of installation
+*******************
+
+***************************************************
+Update Realsense Firmware (should be 5.12 or above)
+***************************************************
+Connect realsense
+To open the realsense gui type in the terminal:
+realsense-viewer
+Check that realsense is connected over at least usb 3.0 (left top of realsense-viewer)
+Click "More" and update firmware
+
+
+
+*****
+Usage with REALSENSE:
+*****
+
+Open terminal:
+roscore (to start ROS)
+
+open new terminal
+source ~/catkin_ws/devel/setup.bash (add this line to bashrc to avoid having to run it every time -> echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc)
+roslaunch realsense2_camera rs_camera.launch
+roslaunch realsense2_camera rs_aligned_depth.launch (for registered depth and color images)
+
